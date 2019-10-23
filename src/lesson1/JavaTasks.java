@@ -2,6 +2,13 @@ package lesson1;
 
 import kotlin.NotImplementedError;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @SuppressWarnings("unused")
 public class JavaTasks {
     /**
@@ -97,9 +104,34 @@ public class JavaTasks {
      * 24.7
      * 99.5
      * 121.3
+     *
+     *  Time complexity: O(n)
+     * Space complexity: O(1)
      */
     static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+        try {
+            // 7731 = 5000 + 2730 + 1
+            int[] temp = new int[7731];
+
+            Stream<String> lines = Files.lines(Paths.get(inputName));
+
+            // T: O(n)
+            lines.forEach(it -> temp[(int)(Float.parseFloat(it) * 10) + 2730]++);
+            lines.close();
+
+            OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outputName));
+            for (int i = 0; i < 7731; i++) {
+                if (temp[i] != 0) {
+                    for (int k = 0; k < temp[i]; k++) {
+                        out.write((float) (i - 2730) / 10 + "\n");
+                    }
+                }
+            }
+
+            out.close();
+        } catch (Exception e) {
+            throw new NotImplementedError();
+        }
     }
 
     /**
@@ -130,9 +162,58 @@ public class JavaTasks {
      * 2
      * 2
      * 2
+     *
+     *  Time complexity: O(n)
+     * Space complexity: O(n)
      */
     static public void sortSequence(String inputName, String outputName) {
-        throw new NotImplementedError();
+        try {
+            Stream<String> lines = Files.lines(Paths.get(inputName));
+
+            // T: O(n), M: O(n)
+            List<Integer> list = lines.map(Integer::parseInt).collect(Collectors.toList());
+            lines.close();
+
+            Map<Integer, Integer> map = new HashMap<>();
+
+            // T: O(n), M: O(n)
+            for (int i : list) {
+                if (map.containsKey(i)) {
+                    map.put(i, map.get(i) + 1);
+                }
+                else {
+                    map.put(i, 1);
+                }
+            }
+
+            // T: O(n)
+            int number = Collections.max(map.values());
+            Set<Integer> maxElements = new HashSet<>();
+
+            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                if (entry.getValue() == number)
+                    maxElements.add(entry.getKey());
+            }
+
+            // T: O(n)
+            int key = Collections.min(maxElements);
+
+            OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outputName));
+
+            // T: O(n)
+            for (int i : list) {
+                if (i != key) {
+                    out.write(i + "\n");
+                }
+            }
+            for (int i = 0; i < number; i++) {
+                out.write(key + "\n");
+            }
+
+            out.close();
+        } catch (Exception e) {
+            throw new NotImplementedError();
+        }
     }
 
     /**

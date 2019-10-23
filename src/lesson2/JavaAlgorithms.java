@@ -3,7 +3,7 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
@@ -98,9 +98,24 @@ public class JavaAlgorithms {
      * При сравнении подстрок, регистр символов *имеет* значение.
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
+     *
+     *  Time complexity: O(len(n) + len(m))
+     * Space complexity: O(len(n) + len(m))
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+
+
+    static public String longestCommonSubstring(String first, String second) {
+        try {
+            SuffixAutomation sa = new SuffixAutomation(second.length());
+            for (int i = 0; i < second.length(); i++) {
+                sa.extend(second.charAt(i));
+            }
+
+            return sa.lcs(first);
+
+        } catch (Exception e) {
+            throw new NotImplementedError();
+        }
     }
 
     /**
@@ -142,8 +157,75 @@ public class JavaAlgorithms {
      * Все слова и буквы -- русские или английские, прописные.
      * В файле буквы разделены пробелами, строки -- переносами строк.
      * Остальные символы ни в файле, ни в словах не допускаются.
+     *
+     *   NOT DONE
      */
+//    private static class Pair<I extends Number, I1 extends Number> {
+//        char a;
+//        int b;
+//
+//        Pair(Character a, int b) {
+//            this.a = a;
+//            this.b = b;
+//        }
+//
+//        int getFirst() {
+//            return a;
+//        }
+//
+//        int getSecond() {
+//            return b;
+//        }
+//    }
+//
+//    private static void findWord(Set<String> answer, int height, int width, WordTree tree, char[] letters,
+//                                 int x, int y, int pos, Set<Pair<Number, Number>> history) {
+//        history.add(new Pair<Number, Number>(letters[x + width * y], pos));
+//    }
+
     static public Set<String> baldaSearcher(String inputName, Set<String> words) {
-        throw new NotImplementedError();
+//        try {
+//            HashSet<String> answer = new HashSet<>();
+//
+//            int treeMaxSize = 0;
+//
+//            for (String word : words)
+//                treeMaxSize += word.length();
+//
+//            WordTree tree = new WordTree(treeMaxSize);
+//
+//            for (String word : words)
+//                tree.add(word);
+//
+//            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(inputName)));
+//            StringBuilder sb = new StringBuilder();
+//
+//            String in;
+//            int height = 0;
+//            while ((in = br.readLine()) != null) {
+//                sb.append(in.replace(" ", ""));
+//                height++;
+//            }
+//            char[] letters = sb.toString().toCharArray();
+//
+//            if (height == 0) {
+//                return answer;
+//            }
+//
+//            int width = letters.length / height;
+//
+//            for (int y = 0; y < height; y++) {
+//                for (int x = 0; x < width; x++) {
+//                    if (tree.isInTree(letters[x + width * y])) {
+//                        findWord(answer, height, width, tree, letters, x, y,
+//                                tree.getChar(0, letters[x + width * y]), new HashSet<>());
+//                    }
+//                }
+//            }
+//
+//            return answer;
+//        } catch (Exception e) {
+            throw new NotImplementedError();
+//        }
     }
 }
