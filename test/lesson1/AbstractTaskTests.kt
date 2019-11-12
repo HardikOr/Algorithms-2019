@@ -337,6 +337,14 @@ abstract class AbstractTaskTests : AbstractFileTests() {
             File("temp.txt").delete()
         }
         try {
+            File("temptemp.txt").bufferedWriter().write("""""")
+            sortSequence("temptemp.txt", "temp.txt")
+            assertFileContent("temp.txt", """""".trimIndent())
+        } finally {
+            File("temp.txt").delete()
+            File("temptemp.txt").delete()
+        }
+        try {
             sortSequence("input/seq_in5.txt", "temp.txt")
             assertFileContent(
                 "temp.txt",

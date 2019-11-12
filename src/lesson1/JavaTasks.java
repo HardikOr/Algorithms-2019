@@ -110,8 +110,7 @@ public class JavaTasks {
      */
     static public void sortTemperatures(String inputName, String outputName) {
         try {
-            // 7731 = 5000 + 2730 + 1
-            int[] temp = new int[7731];
+            int[] temp = new int[7731]; // 7731 = 5000 + 2730 + 1
 
             Stream<String> lines = Files.lines(Paths.get(inputName));
 
@@ -130,7 +129,7 @@ public class JavaTasks {
 
             out.close();
         } catch (Exception e) {
-            throw new NotImplementedError();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -169,10 +168,19 @@ public class JavaTasks {
     static public void sortSequence(String inputName, String outputName) {
         try {
             Stream<String> lines = Files.lines(Paths.get(inputName));
+//            if (lines.count() == 0)
+
 
             // T: O(n), M: O(n)
             List<Integer> list = lines.map(Integer::parseInt).collect(Collectors.toList());
             lines.close();
+
+            if (list.isEmpty()) {
+                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outputName));
+
+                out.write( "");
+                return;
+            }
 
             Map<Integer, Integer> map = new HashMap<>();
 

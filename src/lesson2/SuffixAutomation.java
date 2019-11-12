@@ -9,7 +9,7 @@ import java.util.Map;
 */
 
 class SuffixAutomation {
-    public class state {
+    public class State {
         int len, link;
         Map<Character, Integer> next = new HashMap<>();
     }
@@ -17,25 +17,24 @@ class SuffixAutomation {
     private int sz = 1;
     private int last = 0;
 
-    private state[] states;
+    private State[] states;
 
     SuffixAutomation(int length) {
-        states = new state[length * 2];
+        states = new State[length * 2];
 
-        states[0] = new state();
+        states[0] = new State();
         states[0].len = 0;
         states[0].link = -1;
     }
 
     /**
      *  Online algorithm that adds a new char to the graph in linear time
-     *
      */
     void extend(char c) {
         int cur = sz++;
 
         if (states[cur] == null) {
-            states[cur] = new state();
+            states[cur] = new State();
         }
         states[cur].len = states[last].len + 1;
 
@@ -54,7 +53,7 @@ class SuffixAutomation {
                 int clone = sz++;
 
                 if (states[clone] == null) {
-                    states[clone] = new state();
+                    states[clone] = new State();
                 }
                 states[clone].len = states[p].len + 1;
                 states[clone].next.putAll(states[q].next);
@@ -71,9 +70,7 @@ class SuffixAutomation {
     }
 
     /**
-     *
-     *  Time complexity: O(len(n) + len(m))
-     *
+     *  Time complexity: O(length(string))
      */
 
     String lcs(String string) {
