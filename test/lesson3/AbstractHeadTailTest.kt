@@ -52,6 +52,14 @@ abstract class AbstractHeadTailTest {
         for (i in 1..10)
             assertEquals(true, set.contains(i))
 
+        val tree2: SortedSet<Int> = BinaryTree()
+        for (i in 0..1000) {
+            tree2.add(i)
+        }
+        val bigSet: SortedSet<Int> = tree2.headSet(600)
+        for (i in 50..300) {
+            assertTrue(bigSet.contains(i))
+        }
     }
 
     protected fun doTailSetTest() {
@@ -71,6 +79,14 @@ abstract class AbstractHeadTailTest {
         for (i in 1..10)
             assertEquals(true, set.contains(i))
 
+        val tree2: SortedSet<Int> = BinaryTree()
+        for (i in 0..1000) {
+            tree2.add(i)
+        }
+        val bigSet: SortedSet<Int> = tree2.tailSet(500)
+        for (i in 500..900) {
+            assertTrue(bigSet.contains(i))
+        }
     }
 
     protected fun doHeadSetRelationTest() {
@@ -104,53 +120,42 @@ abstract class AbstractHeadTailTest {
     }
 
     protected fun doSubSetTest() {
-        print("\ntree: ")
-        print("\nsize: " + tree.size)
-        print("\n0: " + tree.contains(0))
-        print("\n1: " + tree.contains(1))
-        print("\n2: " + tree.contains(2))
-        print("\n3: " + tree.contains(3))
-        print("\n4: " + tree.contains(4))
-        print("\n5: " + tree.contains(5))
+        val smallSet: SortedSet<Int> = tree.subSet(3, 8)
+        assertEquals(false, smallSet.contains(1))
+        assertEquals(false, smallSet.contains(2))
+        assertEquals(true, smallSet.contains(3))
+        assertEquals(true, smallSet.contains(4))
+        assertEquals(true, smallSet.contains(5))
+        assertEquals(true, smallSet.contains(6))
+        assertEquals(true, smallSet.contains(7))
+        assertEquals(false, smallSet.contains(8))
+        assertEquals(false, smallSet.contains(9))
+        assertEquals(false, smallSet.contains(10))
 
-        val sset: SortedSet<Int> = tree.subSet(1, 5)
-        sset.add(2)
-        print("\nsset: ")
-        print("\nsize: " + sset.size)
-        print("\n0: " + sset.contains(0))
-        print("\n1: " + sset.contains(1))
-        print("\n2: " + sset.contains(2))
-        print("\n3: " + sset.contains(3))
-        print("\n4: " + sset.contains(4))
-        print("\n5: " + sset.contains(5))
+        assertFailsWith<IllegalArgumentException> { smallSet.add(2) }
+        assertFailsWith<IllegalArgumentException> { smallSet.add(9) }
 
-//        val smallSet: SortedSet<Int> = tree.subSet(3, 8)
-//        assertEquals(false, smallSet.contains(1))
-//        assertEquals(false, smallSet.contains(2))
-//        assertEquals(true, smallSet.contains(3))
-//        assertEquals(true, smallSet.contains(4))
-//        assertEquals(true, smallSet.contains(5))
-//        assertEquals(true, smallSet.contains(6))
-//        assertEquals(true, smallSet.contains(7))
-//        assertEquals(false, smallSet.contains(8))
-//        assertEquals(false, smallSet.contains(9))
-//        assertEquals(false, smallSet.contains(10))
-//
-//        assertFailsWith<IllegalArgumentException> { smallSet.add(2) }
-//        assertFailsWith<IllegalArgumentException> { smallSet.add(9) }
+        val allSet = tree.subSet(-128, 128)
+        for (i in 1..10)
+            assertEquals(true, allSet.contains(i))
 
-//        val allSet = tree.subSet(-128, 128)
-//        for (i in 1..10)
-//            assertEquals(true, allSet.contains(i))
-//
-//        val random = Random()
-//        val toElement = random.nextInt(randomTreeSize) + 1
-//        val fromElement = random.nextInt(toElement - 1) + 1
-//
-//        val randomSubset = randomTree.subSet(fromElement, toElement)
-//        randomValues.forEach { element ->
-//            assertEquals(element in fromElement until toElement, randomSubset.contains(element))
-//        }
+        val random = Random()
+        val toElement = random.nextInt(randomTreeSize) + 1
+        val fromElement = random.nextInt(toElement - 1) + 1
+
+        val randomSubset = randomTree.subSet(fromElement, toElement)
+        randomValues.forEach { element ->
+            assertEquals(element in fromElement until toElement, randomSubset.contains(element))
+        }
+
+        val tree2: SortedSet<Int> = BinaryTree()
+        for (i in 0..1000) {
+            tree2.add(i)
+        }
+        val bigSet: SortedSet<Int> = tree2.subSet(30, 1100)
+        for (i in 50..900) {
+            assertTrue(bigSet.contains(i))
+        }
     }
 
     protected fun doSubSetRelationTest() {

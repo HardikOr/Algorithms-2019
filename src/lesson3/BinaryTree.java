@@ -122,6 +122,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         /**
          * Проверка наличия следующего элемента
          * Средняя
+         *
+         *  Time complexity: O(1)
+         * Space complexity: O(1)
          */
         @Override
         public boolean hasNext() {
@@ -131,6 +134,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         /**
          * Поиск следующего элемента
          * Средняя
+         *
+         *  Time complexity: average - O(1), worst - O(n)
+         * Space complexity: O(n)
          */
         @Override
         public T next() {
@@ -181,7 +187,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return null;
     }
 
-    class SubTree extends BinaryTree<T>{
+    class SubTree extends BinaryTree<T> {
         private T fromElement;
         private T toElement;
         private BinaryTree<T> tree;
@@ -194,11 +200,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
         @Override
         public int size() {
-//            size = tree.size();
             int s = 0;
-            BinaryTreeIterator i = new BinaryTreeIterator();
-            while (i.hasNext()) {
-                if (isValid(i.next()))
+            for (T t : tree) {
+                if (isValid(t))
                     s++;
             }
             return s;
@@ -207,7 +211,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         @Override
         public boolean add(T t) {
             if (isValid(t))
-//                return super.add(t);
                 return tree.add(t);
             else
                 throw new IllegalArgumentException();
@@ -230,37 +233,40 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      * Для этой задачи нет тестов (есть только заготовка subSetTest), но её тоже можно решить и их написать
      * [Найти множество всех элементов в диапазоне {[fromElement, toElement)}
      * Очень сложная
+     *
+     *  Time complexity: O(1)
+     * Space complexity: O(1)
      */
     @NotNull
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
-        // TODO
         return new SubTree(this, fromElement, toElement);
-//        throw new NotImplementedError();
-//        return toSortedSet(root, fromElement, toElement, 1);
     }
 
     /**
      * Найти множество всех элементов меньше заданного
      * Сложная
+     *
+     *  Time complexity: O(1)
+     * Space complexity: O(1)
      */
     @NotNull
     @Override
     public SortedSet<T> headSet(T toElement) {
-        // TODO
-//        SubTree tree = new SubTree<>(null, toElement);
-        throw new NotImplementedError();
+        return new SubTree(this, null, toElement);
     }
 
     /**
      * Найти множество всех элементов больше или равных заданного
      * Сложная
+     *
+     *  Time complexity: O(1)
+     * Space complexity: O(1)
      */
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        // TODO
-        throw new NotImplementedError();
+        return new SubTree(this, fromElement, null);
     }
 
     @Override
