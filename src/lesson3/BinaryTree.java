@@ -108,6 +108,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
     public class BinaryTreeIterator implements Iterator<T> {
         private Deque<Node<T>> stack = new LinkedList<>();
+        private Node<T> cur;
 
         private BinaryTreeIterator() {
             Node<T> node = root;
@@ -115,6 +116,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                 stack.push(node);
                 node = node.left;
             }
+            cur = stack.peek();
         }
 
         /**
@@ -136,6 +138,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                 throw new IllegalArgumentException();
 
             Node<T> tmp = stack.pop();
+            Node<T> res = tmp;
 
             if (tmp.right != null) {
                 tmp = tmp.right;
@@ -145,7 +148,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                     tmp = tmp.left;
                 }
             }
-            return tmp.value;
+
+            cur = res;
+            return cur.value;
         }
 
         /**
@@ -176,87 +181,34 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return null;
     }
 
-
-//    private SortedSet<T> toSortedSet(Node<T> root, T fromElement, T toElement, int mode) {
-//        SortedSet<T> set = new TreeSet<>();
-//        Deque<Node<T>> stack = new LinkedList<>();
-//        stack.push(root);
-//
-//        while (!stack.isEmpty()) {
-//            Node<T> tmp = stack.pop();
-//
-//            if (tmp != null) {
-//
-//                int r = 0, l = 0;
-//                boolean isPush = false;
-//                boolean isPushRight = false;
-//
-//                if (mode == 0 || mode == 1)
-//                    r = tmp.value.compareTo(toElement);
-//
-//                if (mode == 2 || mode == 1)
-//                    l = tmp.value.compareTo(fromElement);
-//
-//                if (mode == 0) {
-//                    if (r < 0) {
-//                        isPush = true;
-//                    } else if (r == 0) {
-//                        isPushRight = true;
-//                    }
-//                }
-//
-//                if (mode == 1) {
-//                    if (l >= 0 && r <= 0 && r * l != 0) {
-//                        isPush = true;
-//                    } else if (r == 0 || l == 0) {
-//                        isPushRight = true;
-//                    }
-//                }
-//
-//                if (mode == 2) {
-//                    if (l > 0) {
-//                        isPush = true;
-//                    } else if (l == 0) {
-//                        isPushRight = true;
-//                    }
-//                }
-//
-//                if (isPush) {
-//                    stack.push(tmp.right);
-//                    stack.push(tmp.left);
-//
-//                    isPush = false;
-//                }
-//
-//                if (isPushRight) {
-//                    stack.push(tmp.right);
-//
-//                    isPushRight = false;
-//                }
-//            }
-//        }
-//        return set;
-//    }
-
-    class SubTree<T extends Comparable<T>> extends BinaryTree<T>{
+    class SubTree extends BinaryTree<T>{
         private T fromElement;
         private T toElement;
+        private BinaryTree<T> tree;
 
-        SubTree(T fromElement, T toElement) {
+        SubTree(BinaryTree<T> tree, T fromElement, T toElement) {
+            this.tree = tree;
             this.fromElement = fromElement;
             this.toElement = toElement;
         }
 
         @Override
         public int size() {
-            return 10;
+//            size = tree.size();
+            int s = 0;
+            BinaryTreeIterator i = new BinaryTreeIterator();
+            while (i.hasNext()) {
+                if (isValid(i.next()))
+                    s++;
+            }
+            return s;
         }
 
         @Override
         public boolean add(T t) {
             if (isValid(t))
-                return super.add(t);
-//                return tree.add(t);
+//                return super.add(t);
+                return tree.add(t);
             else
                 throw new IllegalArgumentException();
         }
@@ -265,7 +217,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         public boolean contains(Object o) {
             @SuppressWarnings("unchecked")
             boolean isV = isValid((T) o);
-            return super.contains(o) && isV;
+            return tree.contains(o) && isV;
         }
 
         private boolean isValid(T el) {
@@ -283,7 +235,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
         // TODO
-        return new SubTree<>(fromElement, toElement);
+        return new SubTree(this, fromElement, toElement);
 //        throw new NotImplementedError();
 //        return toSortedSet(root, fromElement, toElement, 1);
     }
