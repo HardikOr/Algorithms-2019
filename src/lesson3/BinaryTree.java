@@ -154,15 +154,77 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return size;
     }
 
-
     @Nullable
     @Override
     public Comparator<? super T> comparator() {
         return null;
     }
 
+
+    private SortedSet<T> toSortedSet(Node<T> root, T fromElement, T toElement, int mode) {
+        SortedSet<T> set = new TreeSet<>();
+        Deque<Node<T>> stack = new LinkedList<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            Node<T> tmp = stack.pop();
+
+            if (tmp != null) {
+
+                int r = 0, l = 0;
+                boolean isPush = false;
+                boolean isPushRight = false;
+
+                if (mode == 0 || mode == 1)
+                    r = tmp.value.compareTo(toElement);
+
+                if (mode == 2 || mode == 1)
+                    l = tmp.value.compareTo(fromElement);
+
+                if (mode == 0) {
+                    if (r < 0) {
+                        isPush = true;
+                    } else if (r == 0) {
+                        isPushRight = true;
+                    }
+                }
+
+                if (mode == 1) {
+                    if (l >= 0 && r <= 0 && r * l != 0) {
+                        isPush = true;
+                    } else if (r == 0 || l == 0) {
+                        isPushRight = true;
+                    }
+                }
+
+                if (mode == 2) {
+                    if (l > 0) {
+                        isPush = true;
+                    } else if (l == 0) {
+                        isPushRight = true;
+                    }
+                }
+
+                if (isPush) {
+                    stack.push(tmp.right);
+                    stack.push(tmp.left);
+
+                    isPush = false;
+                }
+
+                if (isPushRight) {
+                    stack.push(tmp.right);
+
+                    isPushRight = false;
+                }
+            }
+        }
+        return set;
+    }
+
     /**
      * Для этой задачи нет тестов (есть только заготовка subSetTest), но её тоже можно решить и их написать
+     * [Найти множество всех элементов в диапазоне [fromElement, toElement)]
      * Очень сложная
      */
     @NotNull
@@ -170,6 +232,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     public SortedSet<T> subSet(T fromElement, T toElement) {
         // TODO
         throw new NotImplementedError();
+//        return toSortedSet(root, fromElement, toElement, 1);
     }
 
     /**
