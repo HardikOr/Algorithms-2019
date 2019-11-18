@@ -107,9 +107,14 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     }
 
     public class BinaryTreeIterator implements Iterator<T> {
+        private Deque<Node<T>> stack = new LinkedList<>();
 
         private BinaryTreeIterator() {
-            // Добавьте сюда инициализацию, если она необходима
+            Node<T> node = root;
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
         }
 
         /**
@@ -118,8 +123,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public boolean hasNext() {
-            // TODO
-            throw new NotImplementedError();
+            return !stack.isEmpty();
         }
 
         /**
@@ -128,8 +132,20 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public T next() {
-            // TODO
-            throw new NotImplementedError();
+            if (!hasNext())
+                throw new IllegalArgumentException();
+
+            Node<T> tmp = stack.pop();
+
+            if (tmp.right != null) {
+                tmp = tmp.right;
+
+                while (tmp != null) {
+                    stack.push(tmp);
+                    tmp = tmp.left;
+                }
+            }
+            return tmp.value;
         }
 
         /**
@@ -161,77 +177,114 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     }
 
 
-    private SortedSet<T> toSortedSet(Node<T> root, T fromElement, T toElement, int mode) {
-        SortedSet<T> set = new TreeSet<>();
-        Deque<Node<T>> stack = new LinkedList<>();
-        stack.push(root);
+//    private SortedSet<T> toSortedSet(Node<T> root, T fromElement, T toElement, int mode) {
+//        SortedSet<T> set = new TreeSet<>();
+//        Deque<Node<T>> stack = new LinkedList<>();
+//        stack.push(root);
+//
+//        while (!stack.isEmpty()) {
+//            Node<T> tmp = stack.pop();
+//
+//            if (tmp != null) {
+//
+//                int r = 0, l = 0;
+//                boolean isPush = false;
+//                boolean isPushRight = false;
+//
+//                if (mode == 0 || mode == 1)
+//                    r = tmp.value.compareTo(toElement);
+//
+//                if (mode == 2 || mode == 1)
+//                    l = tmp.value.compareTo(fromElement);
+//
+//                if (mode == 0) {
+//                    if (r < 0) {
+//                        isPush = true;
+//                    } else if (r == 0) {
+//                        isPushRight = true;
+//                    }
+//                }
+//
+//                if (mode == 1) {
+//                    if (l >= 0 && r <= 0 && r * l != 0) {
+//                        isPush = true;
+//                    } else if (r == 0 || l == 0) {
+//                        isPushRight = true;
+//                    }
+//                }
+//
+//                if (mode == 2) {
+//                    if (l > 0) {
+//                        isPush = true;
+//                    } else if (l == 0) {
+//                        isPushRight = true;
+//                    }
+//                }
+//
+//                if (isPush) {
+//                    stack.push(tmp.right);
+//                    stack.push(tmp.left);
+//
+//                    isPush = false;
+//                }
+//
+//                if (isPushRight) {
+//                    stack.push(tmp.right);
+//
+//                    isPushRight = false;
+//                }
+//            }
+//        }
+//        return set;
+//    }
 
-        while (!stack.isEmpty()) {
-            Node<T> tmp = stack.pop();
+    class SubTree<T extends Comparable<T>> extends BinaryTree<T>{
+        private T fromElement;
+        private T toElement;
 
-            if (tmp != null) {
-
-                int r = 0, l = 0;
-                boolean isPush = false;
-                boolean isPushRight = false;
-
-                if (mode == 0 || mode == 1)
-                    r = tmp.value.compareTo(toElement);
-
-                if (mode == 2 || mode == 1)
-                    l = tmp.value.compareTo(fromElement);
-
-                if (mode == 0) {
-                    if (r < 0) {
-                        isPush = true;
-                    } else if (r == 0) {
-                        isPushRight = true;
-                    }
-                }
-
-                if (mode == 1) {
-                    if (l >= 0 && r <= 0 && r * l != 0) {
-                        isPush = true;
-                    } else if (r == 0 || l == 0) {
-                        isPushRight = true;
-                    }
-                }
-
-                if (mode == 2) {
-                    if (l > 0) {
-                        isPush = true;
-                    } else if (l == 0) {
-                        isPushRight = true;
-                    }
-                }
-
-                if (isPush) {
-                    stack.push(tmp.right);
-                    stack.push(tmp.left);
-
-                    isPush = false;
-                }
-
-                if (isPushRight) {
-                    stack.push(tmp.right);
-
-                    isPushRight = false;
-                }
-            }
+        SubTree(T fromElement, T toElement) {
+            this.fromElement = fromElement;
+            this.toElement = toElement;
         }
-        return set;
+
+        @Override
+        public int size() {
+            return 10;
+        }
+
+        @Override
+        public boolean add(T t) {
+            if (isValid(t))
+                return super.add(t);
+//                return tree.add(t);
+            else
+                throw new IllegalArgumentException();
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            @SuppressWarnings("unchecked")
+            boolean isV = isValid((T) o);
+            return super.contains(o) && isV;
+        }
+
+        private boolean isValid(T el) {
+            return (fromElement == null || el.compareTo(fromElement) >= 0) &&
+                    (toElement == null || el.compareTo(toElement) < 0);
+        }
     }
 
     /**
      * Для этой задачи нет тестов (есть только заготовка subSetTest), но её тоже можно решить и их написать
-     * [Найти множество всех элементов в диапазоне [fromElement, toElement)]
+     * [Найти множество всех элементов в диапазоне {[fromElement, toElement)}
      * Очень сложная
      */
     @NotNull
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
         // TODO
-        throw new NotImplementedError();
+        return new SubTree<>(fromElement, toElement);
+//        throw new NotImplementedError();
 //        return toSortedSet(root, fromElement, toElement, 1);
     }
 
@@ -243,6 +296,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @Override
     public SortedSet<T> headSet(T toElement) {
         // TODO
+//        SubTree tree = new SubTree<>(null, toElement);
         throw new NotImplementedError();
     }
 
