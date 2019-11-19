@@ -1,8 +1,12 @@
 package lesson5;
 
 import kotlin.NotImplementedError;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("unused")
@@ -96,7 +100,35 @@ public class JavaGraphTasks {
      * Эта задача может быть зачтена за пятый и шестой урок одновременно
      */
     public static Set<Graph.Vertex> largestIndependentVertexSet(Graph graph) {
-        throw new NotImplementedError();
+        Set set1 = new HashSet();
+        Set set2 = new HashSet();
+
+        Graph graph = new Graph() {
+            @NotNull
+            @Override
+            public Set<Vertex> getVertices() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public Set<Edge> getEdges() {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public Vertex get(String name) {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public Map<Vertex, Edge> getConnections(@NotNull Vertex v) {
+                return null;
+            }
+        }
+//        throw new NotImplementedError();
     }
 
     /**
