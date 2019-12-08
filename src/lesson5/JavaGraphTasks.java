@@ -99,37 +99,7 @@ public class JavaGraphTasks {
      *
      * Эта задача может быть зачтена за пятый и шестой урок одновременно
      */
-    public static Set<Graph.Vertex> largestIndependentVertexSet(Graph graph) {
-        Set set1 = new HashSet();
-        Set set2 = new HashSet();
-
-        Graph graph = new Graph() {
-            @NotNull
-            @Override
-            public Set<Vertex> getVertices() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public Set<Edge> getEdges() {
-                return null;
-            }
-
-            @Nullable
-            @Override
-            public Vertex get(String name) {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public Map<Vertex, Edge> getConnections(@NotNull Vertex v) {
-                return null;
-            }
-        }
-//        throw new NotImplementedError();
-    }
+    public static Set<Graph.Vertex> largestIndependentVertexSet(Graph graph) { throw new NotImplementedError(); }
 
     /**
      * Наидлиннейший простой путь.
@@ -151,7 +121,5 @@ public class JavaGraphTasks {
      *
      * Ответ: A, E, J, K, D, C, H, G, B, F, I
      */
-    public static Path longestSimplePath(Graph graph) {
-        throw new NotImplementedError();
-    }
+    public static Path longestSimplePath(Graph graph) { throw new NotImplementedError(); }
 }

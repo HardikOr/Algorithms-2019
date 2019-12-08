@@ -55,6 +55,12 @@ abstract class AbstractDynamicTests {
                 )
             )
         )
+
+        assertEquals(
+            (1..50000).toList(), longestIncreasingSubSequence(
+                ((50000 downTo 1) + (1..50000)).toList()
+            )
+        )
     }
 
     fun shortestPathOnField(shortestPathOnField: (String) -> Int) {
@@ -64,6 +70,7 @@ abstract class AbstractDynamicTests {
         assertEquals(28, shortestPathOnField("input/field_in4.txt"))
         assertEquals(222, shortestPathOnField("input/field_in5.txt"))
         assertEquals(15, shortestPathOnField("input/field_in6.txt"))
+        assertEquals(11, shortestPathOnField("input/field_in7.txt"))
     }
 
 }
