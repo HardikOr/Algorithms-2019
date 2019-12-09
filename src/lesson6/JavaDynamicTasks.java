@@ -3,10 +3,7 @@ package lesson6;
 import kotlin.NotImplementedError;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @SuppressWarnings("unused")
@@ -119,6 +116,7 @@ public class JavaDynamicTasks {
                 else {
                     List<Integer> list2 = new ArrayList<>();
                     list2.add(line.get(0) + ansList.get(0));
+
                     for (int i = 1; i < line.size(); i++) {
                         list2.add(line.get(i) + Math.min(Math.min(ansList.get(i - 1), ansList.get(i)), list2.get(i - 1)));
                     }
